@@ -6,11 +6,15 @@
   </ion-header>
 
   <ion-content>
-    <ion-list>
-      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
-        {{p.title}}
-      </button>
-    </ion-list>
+
+		<ion-grid>
+			<ion-row>
+				<ion-col>
+					<button ion-button primary full menuToggle >Add New Course </button>
+				</ion-col>
+			</ion-row>
+		</ion-grid>
+
   </ion-content>
 
 </ion-menu>

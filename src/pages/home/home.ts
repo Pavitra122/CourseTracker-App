@@ -11,4 +11,11 @@ export class HomePage {
 
   }
 
+
+	addNewCourse()
+	{
+		console.log('Adding New Course')
+
+	}
+
 }

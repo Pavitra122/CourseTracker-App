@@ -9,6 +9,7 @@ import { ListPage } from '../pages/list/list';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
+import { IonicStorageModule } from '@ionic/storage';
 import { HttpModule } from '@angular/http';
 
 import {NewCourseComponent} from '../components/new-course/new-course'
@@ -24,6 +25,7 @@ import {NewCourseComponent} from '../components/new-course/new-course'
     BrowserModule,
 		HttpModule,
     IonicModule.forRoot(MyApp),
+		IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [

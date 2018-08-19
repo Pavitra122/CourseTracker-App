@@ -4,6 +4,7 @@ import {NewCourseComponent} from '../../components/new-course/new-course'
 import { AlertController } from 'ionic-angular';
 import {Http} from '@angular/http';
 import 'rxjs/add/operator/map';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-home',
@@ -12,9 +13,17 @@ import 'rxjs/add/operator/map';
 export class HomePage {
 
 
-	public course : any;
-  constructor(public navCtrl: NavController, private alertCtrl: AlertController, public http : Http) {
-
+	public courses : Array<{department: any, courseNumber: any, crn: any, status: any}> = [];
+	public server: String;
+  constructor(public navCtrl: NavController, private alertCtrl: AlertController, public http : Http, private storage: Storage) {
+		//this.server = 'http://localhost:5000';
+		this.server = 'http://course-tracker-course-tracker.193b.starter-ca-central-1.openshiftapps.com'
+ 		this.storage.get('courses').then(courses => {
+				if(courses == null)
+					this.courses = [];
+				else
+					this.courses = courses;
+		});
   }
 
 
@@ -51,27 +60,21 @@ export class HomePage {
 								};
 
 
-								this.http.post('http://localhost:5000/v1/get_course',body).map(res=> res.json()).subscribe(data_temp =>{
+								this.http.post(this.server+'/v1/get_course',body).map(res=> res.json()).subscribe(data_temp =>{
 
 									if(data_temp.success == 0)
 									{
-											let alert = this.alertCtrl.create({
-											title: 'CRN Not Found',
-											subTitle: 'Please Check your CRN and try again',
-											buttons: ['Ok']
-											});
-
-											alert.present();
+										this.errorInAddingCourse();
 									}
 									else
 									{
 										let body = {
-											"courseNumber" : data.crn,
+											"CRN": data.crn,
 											"department" : data_temp[0],
-											"CRN" : data_temp[1]
+											"courseNumber" : data_temp[1]
 										};
-										this.course = data;
-										this.http.post('http://localhost:5000/v1/course_track/add',body).map(res=> res.json()).subscribe(data =>{
+										//this.course = data;
+										this.http.post(this.server+'/v1/course_track/add',body).map(res=> res.json()).subscribe(data =>{
 												if (data.success == 1)
 												{
 													let alert = this.alertCtrl.create({
@@ -81,28 +84,23 @@ export class HomePage {
 													});
 
 													alert.present();
+
+													this.courses.push({department : body['department'] , courseNumber: body['courseNumber'] , crn: body['CRN'], status : "Closed"})
+													this.storage.set('courses',this.courses).then(()=>{
+									                  console.log('Added new course to storage');
+									        });
 												}
 												else
 												{
-													let alert = this.alertCtrl.create({
-													title: 'CRN Not Found',
-													subTitle: 'Please Check your CRN and try again',
-													buttons: ['Ok']
-													});
-
-													alert.present();
+													this.errorInAddingCourse();
 												}
 										}, error => {
-											let alert = this.alertCtrl.create({
-											title: 'CRN Not Found',
-											subTitle: 'Please Check your CRN and try again',
-											buttons: ['Ok']
-											});
-
-											alert.present();
+											this.errorInAddingCourse();
 										});
 
 									}
+								}, error=>{
+									this.errorInAddingCourse();
 								});
           }
         }
@@ -110,6 +108,18 @@ export class HomePage {
     });
 
     alert.present();
+
+	}
+
+	errorInAddingCourse()
+	{
+		let alert = this.alertCtrl.create({
+		title: 'CRN Not Found',
+		subTitle: 'Please Check your CRN and try again',
+		buttons: ['Ok']
+		});
+
+		alert.present();
 
 	}
 

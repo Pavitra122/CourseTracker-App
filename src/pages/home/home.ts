@@ -18,7 +18,9 @@ export class HomePage {
   constructor(public navCtrl: NavController, private alertCtrl: AlertController, public http : Http, private storage: Storage) {
 		//this.server = 'http://localhost:5000';
 		this.server = 'http://course-tracker-course-tracker.193b.starter-ca-central-1.openshiftapps.com'
- 		this.storage.get('courses').then(courses => {
+
+
+		this.storage.get('courses').then(courses => {
 				if(courses == null)
 					this.courses = [];
 				else
@@ -111,11 +113,48 @@ export class HomePage {
 
 	}
 
+	removeCourse(course)
+	{
+
+		let body = {
+			"CRN": course.crn,
+			"department" : course.department,
+			"courseNumber" : course.courseNumber
+		};
+		this.http.post(this.server+'/v1/course_track/delete',body).map(res=> res.json()).subscribe(data =>{
+				if (data.success == 1)
+				{
+					const index: number = this.courses.indexOf(course);
+					if (index !== -1) {
+							this.courses.splice(index, 1);
+					}
+					let alert = this.alertCtrl.create({
+					title: 'Course Removed',
+					subTitle: "This course is no longer being tracked",
+					buttons: ['Ok']
+					});
+
+					alert.present();
+
+					this.storage.set('courses',this.courses).then(()=>{
+										console.log('Removed  a course');
+					});
+				}
+				else
+				{
+					this.errorInAddingCourse();
+				}
+		}, error => {
+			this.errorInAddingCourse();
+		});
+
+	}
+
 	errorInAddingCourse()
 	{
 		let alert = this.alertCtrl.create({
-		title: 'CRN Not Found',
-		subTitle: 'Please Check your CRN and try again',
+		title: 'Error Occured',
+		subTitle: 'Please Check your CRN and try again. This can be a server issue as well',
 		buttons: ['Ok']
 		});
 

@@ -19,7 +19,15 @@
 				{{course.courseNumber}}
 			</ion-col>
 			<ion-col>
+				{{course.crn}}
+			</ion-col>
+			<ion-col>
 				{{course.status}}
+			</ion-col>
+			<ion-col>
+				<button ion-button color="danger" icon-only clear (click)="removeCourse(course)" no-margin>
+                  <ion-icon name="trash"></ion-icon>
+         </button>
 			</ion-col>
 		</ion-row>
 	</ion-grid>

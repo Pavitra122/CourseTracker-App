@@ -3,14 +3,14 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Tracked Courses</ion-title>
+    <ion-title style="text-align:center;">Course Tracker</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-	<ion-card *ngFor="let course of courses">
-	<ion-card-header>
-	<ion-grid>
+<ion-content >
+	<ion-card *ngFor="let course of courses"  >
+	<ion-card-header >
+	<ion-grid  no-margin>
 		<ion-row justify-content-center>
 			<ion-col>
 				{{course.department}}
@@ -30,6 +30,7 @@
          </button>
 			</ion-col>
 		</ion-row>
+
 	</ion-grid>
 	</ion-card-header>
 

@@ -13,31 +13,39 @@ import { IonicStorageModule } from '@ionic/storage';
 import { HttpModule } from '@angular/http';
 
 import {NewCourseComponent} from '../components/new-course/new-course'
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { firebaseConfig } from '../config';
 
+import { LoginPage } from '../pages/login/login';
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     ListPage,
-		NewCourseComponent
+		NewCourseComponent,
+		LoginPage
   ],
   imports: [
     BrowserModule,
 		HttpModule,
     IonicModule.forRoot(MyApp),
-		IonicStorageModule.forRoot()
+		IonicStorageModule.forRoot(),
+		AngularFireModule.initializeApp(firebaseConfig.fire)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     HomePage,
     ListPage,
-		NewCourseComponent
+		NewCourseComponent,
+		LoginPage 
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+		AngularFireAuth
   ]
 })
 export class AppModule {}

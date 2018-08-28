@@ -16,22 +16,27 @@ import {NewCourseComponent} from '../components/new-course/new-course'
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { firebaseConfig } from '../config';
+import { NgxErrorsModule } from '@ultimate/ngxerrors';
 
+import { AuthService } from '../services/auth.service';
 import { LoginPage } from '../pages/login/login';
+import { SignupPage } from '../pages/signup/signup';
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     ListPage,
 		NewCourseComponent,
-		LoginPage
+		LoginPage,
+		SignupPage
   ],
   imports: [
     BrowserModule,
 		HttpModule,
     IonicModule.forRoot(MyApp),
 		IonicStorageModule.forRoot(),
-		AngularFireModule.initializeApp(firebaseConfig.fire)
+		AngularFireModule.initializeApp(firebaseConfig.fire),
+		NgxErrorsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -39,13 +44,15 @@ import { LoginPage } from '../pages/login/login';
     HomePage,
     ListPage,
 		NewCourseComponent,
-		LoginPage 
+		LoginPage,
+		SignupPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-		AngularFireAuth
+		AngularFireAuth,
+		AuthService
   ]
 })
 export class AppModule {}

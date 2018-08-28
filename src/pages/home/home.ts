@@ -6,6 +6,8 @@ import {Http} from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Storage } from '@ionic/storage';
 
+import { AuthService } from '../../services/auth.service';
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -15,7 +17,8 @@ export class HomePage {
 
 	public courses : Array<{department: any, courseNumber: any, crn: any, status: any}> = [];
 	public server: String;
-  constructor(public navCtrl: NavController, private alertCtrl: AlertController, public http : Http, private storage: Storage) {
+  constructor(public navCtrl: NavController, private alertCtrl: AlertController, public http : Http, private storage: Storage, private auth: AuthService) {
+
 		//this.server = 'http://localhost:5000';
 		this.server = 'http://course-tracker-course-tracker.193b.starter-ca-central-1.openshiftapps.com'
 
@@ -160,6 +163,10 @@ export class HomePage {
 
 		alert.present();
 
+	}
+	signout() {
+		this.auth.signOut();
+		this.navCtrl.setRoot(HomePage);
 	}
 
 }
